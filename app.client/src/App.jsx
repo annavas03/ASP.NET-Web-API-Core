@@ -1,9 +1,8 @@
-import { GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from 'jwt-decode'; 
 import React, { useState } from "react";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 import "./App.css";
 import "./index.css";
-
 export default function App() {
     const [user, setUser] = useState(null);
 
@@ -20,47 +19,32 @@ export default function App() {
             });
 
             const data = await res.json();
-            console.log("Server response:", data);
-
-
-            
-
             setUser(data);
         } catch (error) {
             console.error("Login error:", error);
         }
     };
 
-    const handleError = () => {
-        console.log("Login Failed");
-
-    };
+    const handleError = () => console.log("Login Failed");
 
     if (user) {
-
         return (
             <div className="text-center mt-8">
                 <h1 className="text-3xl font-bold mb-6">User Profile</h1>
-                <img
-                    src={user.picture}
-                    alt={user.name}
-                    className="rounded-full mx-auto"
-                />
+                <img src={user.picture} alt={user.name} className="rounded-full mx-auto" />
                 <h2 className="text-2xl mt-4">{user.name}</h2>
                 <p className="text-gray-700">{user.email}</p>
             </div>
         );
     }
-
     console.log("User state:", user);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen ">
+        <GoogleOAuthProvider clientId="446631909658-vvbdjfbfqhhs0en5inpl4glf6m21uh2m.apps.googleusercontent.com">
             <h1 className="text-2xl font-bold ">Google Login</h1>
             <div className="mt-4">
                 <GoogleLogin onSuccess={handleSuccess} onError={handleError} />
             </div>
-            
-        </div>
+        </GoogleOAuthProvider>
     );
 }

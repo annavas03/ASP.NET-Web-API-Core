@@ -1,7 +1,8 @@
 ﻿using app.Server.Data;
 using app.Server.Models;
-using Microsoft.AspNetCore.Mvc;
 using Google.Apis.Auth;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
 
 namespace app.Server.Controllers
 {
@@ -29,7 +30,6 @@ namespace app.Server.Controllers
                     }
                 );
 
-                // Перевіряємо, чи користувач уже є в БД
                 var existingUser = _context.Users.FirstOrDefault(u => u.GoogleId == payload.Subject);
                 if (existingUser == null)
                 {
@@ -60,6 +60,7 @@ namespace app.Server.Controllers
 
     public class GoogleTokenRequest
     {
+        [JsonPropertyName("token")]
         public string Token { get; set; }
     }
 }
